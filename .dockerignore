@@ -1,0 +1,11 @@
+# Ignorar o diretório de dependências do Composer
+vendor/
+
+# Ignorar arquivos temporários
+*.log
+*.cache
+.env
+
+# Ignorar arquivos do Git
+.git
+.gitignore
