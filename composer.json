@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\Common\\": "Common/",
+            "App\\Models\\": "Models/",
+            "App\\Controllers\\": "Controllers/",
+            "App\\Http\\": "Http/"
+        }
+    },
+    "require": {
+        "slim/slim": "^4.0",
+        "firebase/php-jwt": "^6.0"
+    }
+}
