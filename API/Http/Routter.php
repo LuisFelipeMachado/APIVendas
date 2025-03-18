@@ -7,12 +7,11 @@ use Controllers\ProductController;
 use Controllers\SaleController;
 use Common\Auth;
 
-require __DIR__ . '/../vendor/autoload.php';
-require_once '../Common/config.php';
-require_once '../Controllers/UserController.php';
-require_once '../Controllers/ProductController.php';
-require_once '../Controllers/SaleController.php';
-require_once '../Common/auth.php';
+require_once __DIR__ . '/../Common/config.php';
+require_once __DIR__ . '/../Controllers/UserController.php';
+require_once __DIR__ . '/../Controllers/ProductController.php';
+require_once __DIR__ . '/../Controllers/SaleController.php';
+require_once __DIR__ . '/../Common/auth.php';
 
 header("Content-Type: application/json");
 

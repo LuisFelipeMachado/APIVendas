@@ -7,7 +7,7 @@ USE PDO;
 $host = 'localhost';
 $dbname = 'usuarios'; 
 $username = 'postgres'; 
-$password = 'xxz2005.A'; 
+$password = 'super_senha'; 
 
 
 try {
