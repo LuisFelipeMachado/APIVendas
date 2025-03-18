@@ -1,0 +1,15 @@
+#ativar pgcrypto banco de dados
+
+INSERT INTO usuarios (name, email, password)
+VALUES ('João Silva', 'joao@email.com', crypt('123456', gen_salt('bf')));
+
+INSERT INTO produtos (name, description, price, stock)
+VALUES ('Teclado Mecânico', 'Teclado RGB switch blue', 350.00, 15);
+
+INSERT INTO vendas (user_id, total_amount)
+VALUES (1, 700.00) RETURNING id;
+
+INSERT INTO vendas_produtos (sale_id, product_id, quantity, price)
+VALUES (1, 1, 2, 350.00);
+
+
