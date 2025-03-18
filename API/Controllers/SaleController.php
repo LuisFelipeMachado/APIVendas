@@ -1,11 +1,40 @@
 <?php
 namespace Controllers;
 
+use Common\config;
+use Common\Auth;
+use PDO;
+use PDOException;
+
 class SaleController {
     private $pdo;
 
     public function __construct() {
         $this->pdo = Config::getConnection();
+    }
+
+    public function index() {
+        try {
+            $stmt = $this->pdo->query("SELECT * FROM vendas");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+    public function show($id) {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM vendas WHERE id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $sale = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$sale) {
+                return ['error' => 'Venda não encontrada'];
+            }
+            return $sale;
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     #Criar uma nova venda

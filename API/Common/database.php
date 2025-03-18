@@ -2,12 +2,13 @@
 
 namespace Common;
 
-USE PDO;
+use PDO;
+use PDOException;
 
 $host = 'localhost';
 $dbname = 'usuarios'; 
 $username = 'postgres'; 
-$password = 'super_senha'; 
+$password = 'xxz2005.A'; 
 
 
 try {

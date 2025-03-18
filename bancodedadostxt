@@ -43,3 +43,12 @@ CREATE TABLE pagamentos (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (sale_id) REFERENCES vendas(id) ON DELETE CASCADE
 );
+
+
+php -S localhost:8000 Routter.php
+
+{
+  "name": "Luis Felipe",
+  "email": "luisfelipe@example.com",
+  "password": "123456"
+}

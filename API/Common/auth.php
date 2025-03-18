@@ -5,6 +5,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use PDO;
 use PDOException;
+use Exception;
 
 require __DIR__ . '/../../vendor/autoload.php';
 require_once 'database.php';
@@ -19,14 +20,14 @@ class Auth {
 
     public function login($email, $password) {
         try {
-            $stmt = $this->pdo->prepare("SELECT id, password FROM users WHERE email = :email");
+            $stmt = $this->pdo->prepare("SELECT id, password FROM usuarios WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$user || !password_verify($password, $user['password'])) {
+            if (!$user || crypt($password, $user['password']) !== $user['password']) {
                 return ['error' => 'Credenciais inválidas'];
-        }
+            }
             $token = $this->generateJWT($user['id']);
             return ['token' => $token];
         } catch (PDOException $e) {
@@ -34,7 +35,7 @@ class Auth {
         }
     }
 
-    private function generateJWT($userId) {
+    private function generateJWT($userId): string {
         $payload = [
             'iat' => time(), 
             'exp' => time() + (60 * 60), 
@@ -50,4 +51,28 @@ class Auth {
             return false;
         }
     }
+    public function protectRoute() {
+        // Verifica se o token foi enviado nos headers
+        $headers = getallheaders();
+        if (!isset($headers['Authorization'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Acesso negado! Token não enviado.']);
+            exit;
+        }
+    
+        // Extrai o token do header (remove "Bearer ")
+        $token = str_replace('Bearer ', '', $headers['Authorization']);
+    
+        // Valida o token
+        $userId = $this->validateToken($token);
+        if (!$userId) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Token inválido ou expirado.']);
+            exit;
+        }
+    
+        // Retorna o ID do usuário autenticado
+        return $userId;
+    }    
+    
 }

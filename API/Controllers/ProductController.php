@@ -57,15 +57,20 @@ class ProductController {
         }
     }
     #Deletar um produto
-    public function delete($id) {
+    public function delete($table, $id) {
         try {
-            $stmt = $this->pdo->prepare("DELETE FROM produtos WHERE id = :id");
-            $stmt->bindParam(':id', $id);
+            // Monta a query dinâmica com a tabela
+            $stmt = $this->pdo->prepare("DELETE FROM {$table} WHERE id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return ['message' => 'Produto removido com sucesso'];
-        } catch (PDOException $e) {
-            return ['error' => $e->getMessage()];
-     }
-   }
-}
 
+            // rowCount() retorna quantas linhas foram afetadas
+            if ($stmt->rowCount() > 0) {
+                return ['message' => ucfirst(rtrim($table, 's')) . ' removido com sucesso'];
+            } else {
+                return ['error' => ucfirst(rtrim($table, 's')) . ' não encontrado'];
+            }
+        } catch (PDOException $e) {
+            return ['error' => $e->getMessage()];}
+        }
+}

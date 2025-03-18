@@ -1,7 +1,7 @@
 <?php
 namespace Controllers;
 
-use Common\Config;
+use Common\config;
 use Common\Auth;
 use PDO;
 use PDOException;
@@ -16,11 +16,21 @@ class UserController {
     public function register($data) {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios (name, email, password) VALUES (:name, :email, :password)");
-            
+
+            # Verifica se os campos estão presentes
+            if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
+                return ['error' => 'Os campos name, email e password são obrigatórios'];
+            }
+
             #Hash da senha antes de armazenar
-            $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
             
-            $stmt->execute($data);
+            $stmt->execute([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $hashedPassword
+            ]);
+            
             return ['message' => 'Usuário criado com sucesso'];
         } catch (PDOException $e) {
             return ['error' => $e->getMessage()];

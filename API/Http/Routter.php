@@ -6,6 +6,7 @@ use Controllers\UserController;
 use Controllers\ProductController;
 use Controllers\SaleController;
 use Common\Auth;
+use Common\Config;
 
 require_once __DIR__ . '/../Common/config.php';
 require_once __DIR__ . '/../Controllers/UserController.php';
@@ -24,6 +25,10 @@ $productController = new ProductController();
 $saleController = new SaleController();
 $auth = new Auth(Config::getConnection());
 
+if ($method === 'POST' && isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
+    $method = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'];
+}
+
  #Roteamento das requisições
 switch ($path[0]) {
     case 'login':
@@ -39,9 +44,12 @@ switch ($path[0]) {
             echo json_encode($userController->register($data));
         } elseif ($method === 'GET') {
             echo json_encode($userController->index());
-        }
+        } elseif ($method === 'DELETE' && isset($path[1])) {
+            echo json_encode($userController->delete($path[1]));
+        }    
+
         break;
-    
+
     case 'products':
     $auth->protectRoute();
         if ($method === 'GET') {
@@ -53,7 +61,7 @@ switch ($path[0]) {
             $data = json_decode(file_get_contents("php://input"), true);
             echo json_encode($productController->update($path[1], $data));
         } elseif ($method === 'DELETE' && isset($path[1])) {
-            echo json_encode($productController->delete($path[1]));
+            echo json_encode($productController->delete('produtos',  $path[1]));
         }
         break;
         
