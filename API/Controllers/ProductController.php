@@ -24,7 +24,7 @@ class ProductController {
         }
     }
 
-    #Buscar um produto por ID
+    
     public function show($id) {
          try {
             $stmt = $this->pdo->prepare("SELECT * FROM produtos WHERE id = :id");
@@ -35,7 +35,7 @@ class ProductController {
             return ['error' => $e->getMessage()];
         }
     }
-    #Criar um novo produto
+   
     public function store($data) {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO produtos (name, description, price, stock) VALUES (:name, :description, :price, :stock)");
@@ -45,7 +45,7 @@ class ProductController {
             return ['error' => $e->getMessage()];
        }
     }
-    #Atualizar um produto
+
     public function update($id, $data) {
         try {
             $stmt = $this->pdo->prepare("UPDATE produtos SET name = :name, description = :description, price = :price, stock = :stock WHERE id = :id");
@@ -56,15 +56,13 @@ class ProductController {
             return ['error' => $e->getMessage()];
         }
     }
-    #Deletar um produto
+  
     public function delete($table, $id) {
         try {
-            // Monta a query dinâmica com a tabela
             $stmt = $this->pdo->prepare("DELETE FROM {$table} WHERE id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-
-            // rowCount() retorna quantas linhas foram afetadas
+            
             if ($stmt->rowCount() > 0) {
                 return ['message' => ucfirst(rtrim($table, 's')) . ' removido com sucesso'];
             } else {

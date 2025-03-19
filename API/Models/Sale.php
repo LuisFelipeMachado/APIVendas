@@ -17,20 +17,18 @@ class Sale {
         try {
             $this->pdo->beginTransaction();
             
-            #Criar a venda
             $stmt = $this->pdo->prepare("INSERT INTO vendas (user_id, total_amount) VALUES (:user_id, 0) RETURNING id");
             $stmt->execute(['user_id' => $userId]);
             $saleId = $stmt->fetchColumn();
             
             $totalAmount = 0;
             foreach ($products as $product) {
-            #Buscar preço do produto
             $stmt = $this->pdo->prepare("SELECT price FROM produtos WHERE id = :id");
             $stmt->execute(['id' => $product['id']]);
             $price = $stmt->fetchColumn();
             $totalAmount += $price * $product['quantity'];
                 
-            #Inserir produto na venda
+
             $stmt = $this->pdo->prepare("INSERT INTO vendas_produtos (sale_id, product_id, quantity, price) VALUES (:sale_id, :product_id, :quantity, :price)");
                 $stmt->execute([
                 'sale_id' => $saleId,
@@ -39,7 +37,7 @@ class Sale {
                 'price' => $price
                 ]);
             }       
-            #Atualizar total da venda
+
             $stmt = $this->pdo->prepare("UPDATE vendas SET total_amount = :total WHERE id = :id");
             $stmt->execute(['total' => $totalAmount, 'id' => $saleId]);
             

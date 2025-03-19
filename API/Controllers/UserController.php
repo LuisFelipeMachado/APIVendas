@@ -12,7 +12,7 @@ class UserController {
     public function __construct() {
         $this->pdo = Config::getConnection();
     }
-    #Cria um novo usuário
+    
     public function register($data) {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios (name, email, password) VALUES (:name, :email, :password)");
@@ -21,8 +21,6 @@ class UserController {
             if (empty($data['name']) || empty($data['email']) || empty($data['password'])) {
                 return ['error' => 'Os campos name, email e password são obrigatórios'];
             }
-
-            #Hash da senha antes de armazenar
             $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
             
             $stmt->execute([
@@ -36,7 +34,8 @@ class UserController {
             return ['error' => $e->getMessage()];
         }
     }
-    #Lista todos os usuários TESTE
+
+    #Teste
      public function index() {
         try {
             $stmt = $this->pdo->query("SELECT id, name, email, created_at FROM usuarios");
@@ -45,7 +44,6 @@ class UserController {
             return ['error' => $e->getMessage()];
         }
     } 
-    #Buscar um usuário por ID
     public function show($id) {
         try {
             $stmt = $this->pdo->prepare("SELECT id, name, email, created_at FROM usuarios WHERE id = :id");
@@ -56,7 +54,7 @@ class UserController {
             return ['error' => $e->getMessage()];
         }
     }
-    #Deletar um usuário
+    
     public function delete($id) {
         try {
             $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id = :id");

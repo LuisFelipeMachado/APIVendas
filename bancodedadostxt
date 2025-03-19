@@ -52,3 +52,10 @@ php -S localhost:8000 Routter.php
   "email": "luisfelipe@example.com",
   "password": "123456"
 }
+
+{
+  "name": "Produto Atualizado",
+  "description": "Descrição nova",
+  "price": 50.0,
+  "stock": 20
+}

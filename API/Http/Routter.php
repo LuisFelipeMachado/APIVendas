@@ -29,7 +29,6 @@ if ($method === 'POST' && isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
     $method = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'];
 }
 
- #Roteamento das requisições
 switch ($path[0]) {
     case 'login':
     if ($method === 'POST') {

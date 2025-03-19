@@ -12,7 +12,7 @@ require_once 'database.php';
 
 class Auth {
     private $pdo;
-    private $secretKey = 'sua_chave_secreta_aqui'; 
+    private $secretKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDIzMzE2MzMsImV4cCI6MTc0MjMzNTIzMywic3ViIjo3fQ.6WtKcg7iZbll6Wkph8ABw0-DpdrVHvyjWLQdmQJGu8k'; 
 
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
@@ -52,7 +52,7 @@ class Auth {
         }
     }
     public function protectRoute() {
-        // Verifica se o token foi enviado nos headers
+    
         $headers = getallheaders();
         if (!isset($headers['Authorization'])) {
             http_response_code(401);
@@ -60,10 +60,10 @@ class Auth {
             exit;
         }
     
-        // Extrai o token do header (remove "Bearer ")
+        
         $token = str_replace('Bearer ', '', $headers['Authorization']);
     
-        // Valida o token
+    
         $userId = $this->validateToken($token);
         if (!$userId) {
             http_response_code(403);
@@ -71,7 +71,7 @@ class Auth {
             exit;
         }
     
-        // Retorna o ID do usuário autenticado
+      
         return $userId;
     }    
     

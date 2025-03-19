@@ -31,13 +31,13 @@ class SaleController {
             if (!$sale) {
                 return ['error' => 'Venda não encontrada'];
             }
+
             return $sale;
         } catch (PDOException $e) {
             return ['error' => $e->getMessage()];
         }
     }
-
-    #Criar uma nova venda
+  
     public function store($userId, $products) {
         try {
             $this->pdo->beginTransaction();
